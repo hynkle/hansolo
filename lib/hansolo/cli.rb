@@ -5,18 +5,14 @@ module Hansolo
     @@attr_accessors = [ :keydir, :app, :urls, :runlist, :local_tmp_dir, :local_cookbooks_dir, :local_data_bags_dir, :gateway ]
     attr_accessor *@@attr_accessors
 
-    def configuration
-      Hansolo.configuration
-    end
-
     def initialize(args={})
-      @keydir               = args[:keydir] || configuration.keydir
-      @urls                 = args[:urls] || configuration.urls
-      @runlist              = args[:runlist] || configuration.runlist
-      @local_cookbooks_dir  = args[:local_cookbooks_dir] || configuration.local_cookbooks_dir
-      @local_data_bags_dir  = args[:local_data_bags_dir] || configuration.local_data_bags_dir
-      @app                  = args[:app] || configuration.app
-      @gateway              = args[:gateway] || configuration.gateway
+      @keydir               = args[:keydir] || Hansolo.keydir
+      @urls                 = args[:urls] || Hansolo.urls
+      @runlist              = args[:runlist] || Hansolo.runlist
+      @local_cookbooks_dir  = args[:local_cookbooks_dir] || Hansolo.local_cookbooks_dir
+      @local_data_bags_dir  = args[:local_data_bags_dir] || Hansolo.local_data_bags_dir
+      @app                  = args[:app] || Hansolo.app
+      @gateway              = args[:gateway] || Hansolo.gateway
     end
 
     def self.banner

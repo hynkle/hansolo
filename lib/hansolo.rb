@@ -4,5 +4,5 @@ require 'json'
 require 'aws-sdk'
 
 require "hansolo/util"
-require "hansolo/configuration"
+require "hansolo/config"
 require "hansolo/version"

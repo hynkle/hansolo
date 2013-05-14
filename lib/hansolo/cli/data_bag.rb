@@ -11,12 +11,12 @@ module Hansolo
       end
     end
 
-    def self.data_bag_filename(configuration, data_bag, data_bag_item)
-      File.expand_path(File.join(configuration.local_data_bags_dir, data_bag, "#{data_bag_item}.json"))
+    def self.data_bag_filename(data_bag, data_bag_item)
+      File.expand_path(File.join(Hansolo.local_data_bags_dir, data_bag, "#{data_bag_item}.json"))
     end
 
     def data_bag_filename
-      self.class.data_bag_filename(configuration, data_bag, data_bag_item)
+      self.class.data_bag_filename(data_bag, data_bag_item)
     end
 
     def self.read_data_bag(data_bag_filename)
@@ -24,23 +24,23 @@ module Hansolo
     end
 
     def read
-      if configuration.before_data_bags_read.respond_to?(:call)
-        instance_eval &configuration.before_data_bags_read
+      if Hansolo.before_data_bags_read.respond_to?(:call)
+        instance_eval &Hansolo.before_data_bags_read
         Util.check_exit_status
       end
       self.class.read_data_bag(data_bag_filename)
     end
 
     def read_all
-      if configuration.before_data_bags_read.respond_to?(:call)
-        instance_eval &configuration.before_data_bags_read
+      if Hansolo.before_data_bags_read.respond_to?(:call)
+        instance_eval &Hansolo.before_data_bags_read
         Util.check_exit_status
       end
 
       bags_data = {}
-      Dir["#{configuration.local_data_bags_dir}/*/**"].each do |filename|
+      Dir["#{Hansolo.local_data_bags_dir}/*/**"].each do |filename|
         next if File.directory?(File.expand_path(filename))
-        key = filename.gsub(/^#{configuration.local_data_bags_dir}\//, '')
+        key = filename.gsub(/^#{Hansolo.local_data_bags_dir}\//, '')
         key.gsub!(/\.json$/,'')
         bags_data[key]  = JSON.parse(File.read(File.expand_path(filename)))
       end
@@ -71,8 +71,9 @@ module Hansolo
         f.write content.to_json
       end
 
-      if configuration.after_data_bags_write.respond_to?(:call)
-        instance_eval &configuration.after_data_bags_write
+      if Hansolo.after_data_bags_write.respond_to?(:call)
+        instance_eval &Hansolo.after_data_bags_write
+        Util.check_exit_status
       end
     end
   end

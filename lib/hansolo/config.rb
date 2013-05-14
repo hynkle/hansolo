@@ -1,14 +1,5 @@
 module Hansolo
   class << self
-    attr_accessor :configuration
-  end
-
-  def self.configure
-    self.configuration ||= Configuration.new
-    yield(configuration)
-  end
-
-  class Configuration
     attr_accessor :keydir,
       :urls,
       :app,
@@ -22,11 +13,14 @@ module Hansolo
       :before_data_bags_read,
       :after_data_bags_write,
       :post_ssh_cmd
-
-    def initialize
-      @local_cookbooks_dir = File.join('', 'tmp', 'cookbooks')
-      @local_data_bags_dir = File.join('', 'tmp', 'data_bags')
-      @post_ssh_cmd = 'uptime'
-    end
   end
+
+  self.local_cookbooks_dir = File.join('', 'tmp', 'cookbooks')
+  self.local_data_bags_dir = File.join('', 'tmp', 'data_bags')
+  self.post_ssh_cmd = 'uptime'
+
+  def self.configure
+    yield self
+  end
+
 end
